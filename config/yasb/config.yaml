@@ -1,0 +1,461 @@
+# Bar with GlazeWM | Catppuccin Mocha | Glazing Mocha
+# Place this file at: C:/users/{username}/.config/yasb/config.yaml 
+# For more information, visit https://github.com/amnweb/yasb/wiki
+
+watch_stylesheet: True # Monitor your CSS/stylesheet file for changes
+watch_config: True # Edit config.yaml and save it, YASB automatically reloads the configuration
+debug: False # Controls debug logging
+update_check: False # Enables automatic update checks
+# show_systray: False # Enables the Windows system tray (notification area)
+glazewm: # GlazeWM Settings
+  start_command: "glazewm.exe start" # Start GlazeWM
+  stop_command: "glazewm.exe command wm-exit" # Stop GlazeWM
+  reload_command: "glazewm.exe command wm-exit && glazewm.exe start" # Reload GlazeWM
+bars:
+  primary-bar:
+    enabled: True
+    screens: ['*'] # * Show on all monitors.
+    class_name: yasb-bar # CSS class assigned to the bar.
+    alignment:
+      position: top
+      align: center
+    animation:
+      enabled: True # Turns animations on.
+      duration: 300 # Animation length in milliseconds.
+    blur_effect:
+      enabled: True # Enables Windows backdrop blur behind the bar.
+      #dark_mode: true # Force dark-themed blur rendering.
+      round_corners: False # Uses rounded corners across bar
+      round_corners_type: normal
+      border_color: None
+      #acrylic: false # Acrylic is Microsoft's heavier blur effect.
+    window_flags:
+      always_on_top: False # Windows can potentially cover bar.
+      windows_app_bar: True # Makes Windows treat YASB like the taskbar. This interferes with apps in full-screen. Notably while watching videos in full screen
+      hide_on_fullscreen: True # Automatically hides the bar when an application enters fullscreen.
+      #hide_on_maximized: False # The bar disappears whenever a window is maximized.
+      #auto_hide: False # Similar to Windows taskbar auto-hide.
+    dimensions:
+      width: 100%
+      height: 34
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    widgets:
+      left: # Placed left to Right
+      - home # Usually a launcher/menu button opening a custom menu or shortcuts
+      - glazewm_workspaces # Shows GlazeWM workspaces and allows switching between them
+      - lines # Visual separator between widgets
+      - notes # Quick notes widget
+      - todo # To-do list widget
+      # - ai_chat # Quick launcher/integration for AI chat tools
+      - lines # Visual separator between widgets
+      - media # Current media playback info (Spotify, browser media, etc.)
+      - lines # Visual separator between widgets
+      - active_window # Shows the title of the currently focused window
+      center:
+      - clock # Time and date display
+      # - pomodoro # Pomodoro timer for focused work sessions.
+      right: # Placed left to Right
+      # - taskbar # Windows taskbar-like application buttons
+      - microphone # System microphone
+      - volume # System audio volume display and control.
+      - lines # Visual separator between widgets
+      - bluetooth # Bluetooth status and connected devices
+      - wifi # Wireless network status, signal strength, SSID.
+      - lines # Visual separator between widgets
+      - battery # Battery percentage, charging status, remaining time
+      - power_menu # Shutdown, restart, sleep, lock, logout menu
+      - notifications # Notification count and notification center access
+widgets:
+  home:
+    type: yasb.home.HomeWidget # https://github.com/amnweb/yasb/wiki/(Widget)-Home
+    options:
+      label: "<span>\ue62a</span>"
+      menu_list:
+      - {title: User Home, path: '~' }
+      - {title: Download, path: ~\Downloads }
+      - {title: Documents, path: ~\Documents }
+      - {title: Pictures, path: ~\Pictures }
+      system_menu: True
+      power_menu: False
+      blur: True
+      round_corners: True
+      round_corners_type: normal
+      border_color: None
+      alignment: left
+      offset_left: -12
+  glazewm_workspaces:
+    type: glazewm.workspaces.GlazewmWorkspacesWidget # https://github.com/amnweb/yasb/wiki/(Widget)-GlazeWM-Workspaces
+    options:
+      offline_label: "GlazeWM Offline"
+      hide_if_offline: True
+      monitor_exclusive: False
+      hide_empty_workspaces: False
+      enable_scroll_switching: False
+  lines:
+    type: "yasb.custom.CustomWidget"
+    options:
+      label: "\u007c"
+      label_alt: "\u007c"
+      class_name: "separator-widget"
+      callbacks:
+        on_left: "do_nothing"
+  notes:
+    type: "yasb.notes.NotesWidget"
+    options:
+      label: "<span>\udb82\udd0c</span> {count}"
+      label_alt: "{count} notes"
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        max_title_size: 150
+        show_date_time: true
+      icons:
+        note: "\udb82\udd0c"
+        delete: "\ueab8"
+        copy: "\uebcc"
+        float_on: "\udb84\udcac"
+        float_off: "\udb84\udca9"
+        close: "\uf00d"
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+  todo:
+    type: "yasb.todo.TodoWidget"
+    options:
+      label: "<span>\uf0ae</span> {count}"
+      label_alt: "<span>\uf0ae</span> {completed}/{count} done"
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+      icons:
+        add: "\uf501 New Task"
+        edit: "Edit"
+        delete: "Delete"
+        date: "\ue641"
+        category: "\uf412"
+        checked: "\udb80\udd34"
+        unchecked: "\udb80\udd30"
+        sort: "\ueab4"
+        no_tasks: "\uf4a0"
+      categories:
+        default:
+          label: "General"
+        soon:
+          label: "Complete soon"
+        today:
+          label: "End of day"
+        urgent:
+          label: "Urgent"
+        important:
+          label: "Important"
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+  ai_chat:
+    type: "yasb.ai_chat.AiChatWidget"
+    options:
+      label: "<span>\uDB81\uDE74</span>"
+      chat:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "center"
+        direction: "down"
+        offset_left: 0
+        offset_top: 6
+      icons:
+        attach: "\uf067"
+        send: "\uf1d8"
+        stop: "\uf04d"
+        clear: "\uf1f8"
+        assistant: "\udb81\ude74"
+        float_on: "\udb84\udcac"
+        float_off: "\udb84\udca9"
+        close: "\uf00d"
+        copy: "\uebcc"
+        copy_check: "\uf00c"
+      start_floating: false
+      callbacks:
+        on_left: "toggle_chat"
+        on_middle: "do_nothing"
+        on_right: "do_nothing"
+      providers:
+        - provider: "Ollama"
+          api_endpoint: "http://localhost:11434/v1" #default
+          credential: "ollama"
+          models:
+            - name: "llama3:latest" #you can find the name using 'ollama list'
+              label: "You have to set it up in the config.yaml" 
+              default: true
+  media:
+    type: "yasb.media.MediaWidget"
+    options:
+      label: "{title} - {artist}"
+      label_alt: "{artist} - {title}"
+      hide_empty: true
+      callbacks:
+        on_left: "toggle_media_menu"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+      show_thumbnail: true
+      controls_only: false
+      max_field_size:
+        label: 30
+        label_alt: 40
+      icons:
+        play: "▶"
+        pause: "⏸"
+        prev_track: "⏮"
+        next_track: "⏭"
+      media_menu:
+        blur: true
+        round_corners: true
+        alignment: "right"
+        direction: "down"
+        thumbnail_size: 120
+        show_source: true
+      media_menu_icons:
+        play: "▶"
+        pause: "⏸"
+        prev_track: "⏮"
+        next_track: "⏭"
+
+  active_window:
+    type: "yasb.active_window.ActiveWindowWidget"
+    options:
+      label: "{win[title]}"
+      label_alt: "[class_name='{win[class_name]}' exe='{win[process][name]}' hwnd={win[hwnd]}]"
+      label_no_window: ""
+      label_icon: true
+      label_icon_size: 16
+      max_length: 36
+      max_length_ellipsis: "..."
+      monitor_exclusive: false
+  clock:
+    type: yasb.clock.ClockWidget
+    options:
+      label: '{%a, %d/%m/%y %H:%M}<span>{alarm}</span>'
+      label_alt: "{%A, %d %B %Y %H:%M}"
+      timezones: []
+      calendar:
+        blur: true
+        round_corners: true
+        alignment: center
+        direction: down
+        extended: false
+        show_years: true
+        show_holidays: false
+        show_week_numbers: true
+      callbacks:
+        on_left: toggle_calendar
+        on_middle: toggle_label
+        on_right: context_menu
+  pomodoro:
+    type: "yasb.pomodoro.PomodoroWidget"
+    options:
+      label: "<span>{icon}</span> {remaining}"
+      label_alt: "<span>{icon}</span> {session}/{total_sessions} - {status}"
+      work_duration: 25
+      break_duration: 5
+      long_break_duration: 15
+      long_break_interval: 4
+      auto_start_breaks: true
+      auto_start_work: true
+      sound_notification: true
+      show_notification: true
+      hide_on_break: false
+      icons:
+        work: "\uf252"
+        break: "\uf253"
+        paused: "\uf254"
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        circle_background_color: "#09ffffff"
+        circle_work_progress_color: "#88c0d0"
+        circle_break_progress_color: "#a3be8c"
+        circle_thickness: 8
+        circle_size: 160
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "reset_timer"
+        on_right: "toggle_label"
+  taskbar:
+    type: "yasb.taskbar.TaskbarWidget"
+    options:
+      animation:
+        enabled: true
+      icon_size: 16
+      ignore_apps:
+        processes: []
+        titles: []
+        classes: []
+      container_padding:
+        top: 0
+        left: 5
+        bottom: 0
+        right: 5
+  volume:
+    type: yasb.volume.VolumeWidget
+    options:
+      label: <span>{icon}</span>
+      label_alt: <span>{icon}</span>{level}
+      tooltip: true
+      volume_icons:
+      - "\uE74F"
+      - "\uE992"
+      - "\uE993"
+      - "\uE994"
+      - "\uE995"
+      callbacks:
+        on_left: toggle_volume_menu
+        on_right: toggle_mute
+      audio_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: normal
+        border_color: system
+        alignment: right
+        direction: down
+        show_apps: true
+        show_app_labels: false
+        show_app_icons: true
+        show_apps_expanded: false
+        app_icons:
+          toggle_down: "\uE972"
+          toggle_up: "\uE971"
+  microphone:
+    type: "yasb.microphone.MicrophoneWidget"
+    options:
+      label: "<span>{icon}</span> {level}"
+      icons:
+        normal: "\uf130"
+        muted: "\uf131"
+      callbacks:
+        on_left: "toggle_mic_menu"
+        on_middle: "toggle_label"
+        on_right: "toggle_mute"
+  bluetooth:
+    type: "yasb.bluetooth.BluetoothWidget"
+    options:
+      label: "<span>{icon}</span>"
+      label_alt: "{device_name}"
+      label_no_device: "No devices"
+      label_device_separator: ", "
+      tooltip: true
+      icons:
+        bluetooth_on: "\udb80\udcaf"
+        bluetooth_off: "\udb80\udcb2"
+        bluetooth_connected: "\udb80\udcb1"
+      callbacks:
+        on_left: "toggle_label"
+        on_right: "exec cmd.exe /c start ms-settings:bluetooth"
+        on_middle: "do_nothing"
+  wifi:
+    type: "yasb.wifi.WifiWidget"
+    options:
+      label: "<span>{wifi_icon}</span>"
+      label_alt: "{wifi_name} {wifi_strength}%"
+      update_interval: 5000
+      callbacks:
+        on_left: "toggle_label"
+        on_middle: "exec cmd.exe /c start ms-settings:network"
+        on_right: "exec quick_settings"
+      wifi_icons: [
+          "\udb82\udd2e", # Icon for 0% strength
+          "\udb82\udd1f", # Icon for 1-20% strength
+          "\udb82\udd22", # Icon for 21-40% strength
+          "\udb82\udd25", # Icon for 41-80% strength
+          "\udb82\udd28", # Icon for 81-100% strength
+        ]
+  notifications:
+    type: yasb.notifications.NotificationsWidget
+    options:
+      label: "<span>\uf476</span> {count}"
+      label_alt: '{count} notifications'
+      hide_empty: true
+      tooltip: false
+      callbacks:
+        on_left: toggle_notification
+        on_right: do_nothing
+        on_middle: do_nothing
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span> {percent}%"
+      update_interval: 5000
+      time_remaining_natural: False
+      hide_unsupported: True
+      charging_options:
+        icon_format: "{charging_icon}"
+        blink_charging_icon: true
+        blink_interval: 500
+      status_thresholds:
+        critical: 10
+        low: 25
+        medium: 75
+        high: 95
+        full: 100
+      status_icons:
+        icon_charging: "\uf0e7"
+        icon_critical: "\uf244"
+        icon_low: "\uf243"
+        icon_medium: "\uf242"
+        icon_high: "\uf241"
+        icon_full: "\uf240"
+  power_menu:
+    type: yasb.power_menu.PowerMenuWidget
+    options:
+      label: "<span>\uE712</span>"
+      uptime: true
+      show_user: true
+      menu_style: popup
+      popup:
+        blur: true
+        round_corners: true
+        round_corners_type: normal
+        border_color: System
+        alignment: right
+        offset_left: 12
+      profile_image_size: 64
+      buttons:
+        lock:
+        - "\uDB80\uDF41"
+        - Lock
+        signout:
+        - "\uDB80\uDF43"
+        - Sign out
+        restart:
+        - "\uDB81\uDC53"
+        - Restart
+        shutdown:
+        - "\uDB82\uDD06"
+        - Shut Down
+        cancel:
+        - ''
+        - Cancel
