@@ -89,20 +89,8 @@ Suggested assignments:
 | ---------- | ----------------------- |
 | Ctrl+Alt+D | Open Today's Daily Note |
 | Ctrl+Alt+W | QuickAdd: Work Item     |
-| Ctrl+Alt+A | Open Agenda             |
-| Ctrl+Alt+T | Open ToDo               |
-| Ctrl+P     | Command Palette         |
-
-Adjust these to avoid conflicts with your other tools.
-
----
-
-| Hotkey     | Action                  |
-| ---------- | ----------------------- |
-| Ctrl+Alt+D | Open Today's Daily Note |
-| Ctrl+Alt+W | New Work Item Note      |
 | Ctrl+Alt+N | Open Standard Notes     |
-| Ctrl+Alt+A | Open Agenda             |
+| Ctrl+Alt+A | Open Agenda Conflict    |
 | Ctrl+Alt+T | Open ToDo               |
 | Ctrl+Alt+[ | Previous Daily Note     |
 | Ctrl+Alt+] | Next Daily Note         |

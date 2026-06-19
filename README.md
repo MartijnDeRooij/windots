@@ -16,9 +16,6 @@ The goal is to create a productive and consistent environment that combines:
 
 Many configurations are shared with or inspired by my Linux dotfiles, allowing a familiar workflow across both platforms.
 
-TODO: 
-1. GlazeWM keybindings and it conflicting with FlowLauncher + Obsidian
-
 ## ℹ️ System Overview
 
 <details>
